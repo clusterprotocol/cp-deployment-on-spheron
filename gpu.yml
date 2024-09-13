@@ -1,0 +1,40 @@
+      version: "1.0"
+      services:
+        cluster-protocol:
+          image: public.ecr.aws/b0i8r5m0/clusterprotocol/provider-setup:latest
+          expose:
+            - port: 8080
+              as: 8080
+              to:
+                - global: true
+          env:
+            - ENV_VAR=value
+      
+      profiles:
+        name: cluster-profile
+        duration: 1h
+        tier:
+          - community
+        compute:
+          cluster-protocol:
+            resources:
+              cpu:
+                units: 2
+              memory:
+                size: 8Gi
+              storage:
+                size: 25Gi
+        placement:
+          westcoast:
+            attributes:
+              region: finland
+            pricing:
+              cluster-protocol:
+                denom: USDT
+                amount: 5000000
+      
+      deployment:
+        cluster-protocol:
+          westcoast:
+            profile: cluster-protocol
+            count: 1
